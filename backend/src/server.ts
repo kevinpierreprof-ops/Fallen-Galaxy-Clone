@@ -30,6 +30,7 @@ import { seedDatabase, needsSeeding } from '@/database/seed';
 // Import routes
 import authRoutes from '@/routes/authRoutes';
 import gameRoutes from '@/routes/gameRoutes';
+import planetRoutes from '@/routes/planetRoutes';
 
 // Import middleware
 import { errorHandler } from '@/middleware/errorHandler';
@@ -224,6 +225,12 @@ app.use('/api/auth', authRoutes);
  * Handles game-related API endpoints
  */
 app.use('/api/game', gameRoutes);
+
+/**
+ * Planet Routes
+ * Handles planet-related API endpoints
+ */
+app.use('/api/game/planets', planetRoutes);
 
 /**
  * 404 Handler
