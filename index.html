@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fallen Galaxy Clone</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div id="game-container">
+        <header class="game-header">
+            <h1>Fallen Galaxy Clone</h1>
+            <div class="game-info">
+                <span id="player-resources">Resources: 0</span>
+                <span id="player-score">Score: 0</span>
+            </div>
+        </header>
+        
+        <main class="game-main">
+            <div id="galaxy-map" class="galaxy-map">
+                <canvas id="game-canvas"></canvas>
+            </div>
+            
+            <aside class="control-panel">
+                <h2>Controls</h2>
+                <div class="control-section">
+                    <h3>Actions</h3>
+                    <button id="btn-start-game" class="game-button">Start Game</button>
+                    <button id="btn-pause-game" class="game-button" disabled>Pause</button>
+                    <button id="btn-reset-game" class="game-button">Reset</button>
+                </div>
+                
+                <div class="control-section">
+                    <h3>Game Info</h3>
+                    <div id="game-status">
+                        <p>Status: <span id="status-text">Ready</span></p>
+                        <p>Turn: <span id="turn-count">0</span></p>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3>Instructions</h3>
+                    <ul class="instructions">
+                        <li>Click Start Game to begin</li>
+                        <li>Manage your space empire</li>
+                        <li>Expand across the galaxy</li>
+                        <li>Compete with your opponent</li>
+                    </ul>
+                </div>
+            </aside>
+        </main>
+        
+        <footer class="game-footer">
+            <p>Fallen Galaxy Clone - Made with AI</p>
+        </footer>
+    </div>
+    
+    <script src="scripts/config.js"></script>
+    <script src="scripts/game.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>

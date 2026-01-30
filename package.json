@@ -1,0 +1,21 @@
+{
+  "name": "fallen-galaxy-clone",
+  "version": "0.1.0",
+  "description": "A clone of Fallen Galaxy space strategy game",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080 -o",
+    "dev": "npx http-server -p 8080"
+  },
+  "keywords": [
+    "game",
+    "space",
+    "strategy",
+    "fallen-galaxy"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
