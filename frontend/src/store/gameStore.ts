@@ -82,11 +82,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
           });
         }
       }
+
+      // Close the modal on successful colonization
+      set({ selectedPlanet: null });
     });
 
     // Listen for colonization errors
     socket.on('colonize:error', (data: { success: boolean; error: string }) => {
       console.error('Colonization failed:', data.error);
+      // TODO: Replace with proper toast notification system
+      // For now, we'll keep using alert as it's better than nothing
       alert(`Failed to colonize planet: ${data.error}`);
     });
 

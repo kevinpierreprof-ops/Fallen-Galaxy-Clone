@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import type { Planet } from '@shared/types/game';
 import './PlanetDetailsModal.css';
@@ -10,6 +10,7 @@ interface PlanetDetailsModalProps {
 
 export default function PlanetDetailsModal({ planet, onClose }: PlanetDetailsModalProps) {
   const { player, colonizePlanet } = useGameStore();
+  const [isColonizing, setIsColonizing] = useState(false);
 
   // Close modal on ESC key
   useEffect(() => {
@@ -22,6 +23,11 @@ export default function PlanetDetailsModal({ planet, onClose }: PlanetDetailsMod
     document.addEventListener('keydown', handleEsc);
     return () => document.removeEventListener('keydown', handleEsc);
   }, [onClose]);
+
+  // Reset colonizing state when planet changes
+  useEffect(() => {
+    setIsColonizing(false);
+  }, [planet]);
 
   // Don't render if no planet selected
   if (!planet) return null;
@@ -43,9 +49,11 @@ export default function PlanetDetailsModal({ planet, onClose }: PlanetDetailsMod
     player.resources.credits >= colonizationCost.credits;
 
   const handleColonize = () => {
-    if (planet && canAfford) {
+    if (planet && canAfford && !isColonizing) {
+      setIsColonizing(true);
       colonizePlanet(planet.id);
-      onClose();
+      // Note: Modal will close when colonize:success event is received
+      // or user can manually close on error
     }
   };
 
@@ -169,10 +177,10 @@ export default function PlanetDetailsModal({ planet, onClose }: PlanetDetailsMod
                 <button
                   className="colonize-button"
                   onClick={handleColonize}
-                  disabled={!canAfford}
-                  title={!canAfford ? 'Insufficient resources' : 'Colonize this planet'}
+                  disabled={!canAfford || isColonizing}
+                  title={!canAfford ? 'Insufficient resources' : isColonizing ? 'Colonizing...' : 'Colonize this planet'}
                 >
-                  {canAfford ? 'Colonize Planet' : 'Insufficient Resources'}
+                  {isColonizing ? 'Colonizing...' : canAfford ? 'Colonize Planet' : 'Insufficient Resources'}
                 </button>
               </div>
             )}

@@ -221,16 +221,17 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/auth', authRoutes);
 
 /**
+ * Planet Routes
+ * Handles planet-related API endpoints
+ * NOTE: Must be mounted before general game routes to avoid route conflicts
+ */
+app.use('/api/game/planets', planetRoutes);
+
+/**
  * Game Routes
  * Handles game-related API endpoints
  */
 app.use('/api/game', gameRoutes);
-
-/**
- * Planet Routes
- * Handles planet-related API endpoints
- */
-app.use('/api/game/planets', planetRoutes);
 
 /**
  * 404 Handler

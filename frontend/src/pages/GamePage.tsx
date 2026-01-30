@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import GameCanvas from '../components/GameCanvas';
 import ResourcePanel from '../components/ResourcePanel';
@@ -8,8 +8,7 @@ import PlanetDetailsModal from '../components/PlanetDetailsModal';
 import type { Planet } from '@shared/types/game';
 
 export default function GamePage() {
-  const { connect, disconnect, setSelectedPlanet } = useGameStore();
-  const [selectedPlanet, setLocalSelectedPlanet] = useState<Planet | null>(null);
+  const { connect, disconnect, selectedPlanet, setSelectedPlanet } = useGameStore();
 
   useEffect(() => {
     connect();
@@ -17,12 +16,10 @@ export default function GamePage() {
   }, [connect, disconnect]);
 
   const handlePlanetClick = (planet: Planet) => {
-    setLocalSelectedPlanet(planet);
     setSelectedPlanet(planet);
   };
 
   const handleCloseModal = () => {
-    setLocalSelectedPlanet(null);
     setSelectedPlanet(null);
   };
 

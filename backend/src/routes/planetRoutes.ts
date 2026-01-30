@@ -31,8 +31,10 @@ function transformPlanet(dbPlanet: DBPlanet) {
   return {
     id: dbPlanet.id,
     name: dbPlanet.name,
-    x: dbPlanet.x_position,
-    y: dbPlanet.y_position,
+    position: {
+      x: dbPlanet.x_position,
+      y: dbPlanet.y_position
+    },
     size: dbPlanet.size,
     ownerId: dbPlanet.owner_id,
     population: dbPlanet.population,

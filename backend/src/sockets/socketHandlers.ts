@@ -268,8 +268,10 @@ export const setupSocketHandlers = (
       const planet = {
         id: updatedDbPlanet.id,
         name: updatedDbPlanet.name,
-        x: updatedDbPlanet.x_position,
-        y: updatedDbPlanet.y_position,
+        position: {
+          x: updatedDbPlanet.x_position,
+          y: updatedDbPlanet.y_position
+        },
         size: updatedDbPlanet.size,
         ownerId: updatedDbPlanet.owner_id,
         population: updatedDbPlanet.population,
