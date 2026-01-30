@@ -10,12 +10,19 @@
 import { Router, Request, Response } from 'express';
 import { logger } from '@/utils/logger';
 import { authenticateToken } from '@/middleware/auth';
+import { createRateLimiter } from '@/middleware/rateLimiter';
 import { planetModel } from '@/database/models/PlanetModel';
 import { userModel } from '@/database/models/UserModel';
 import type { AuthRequest } from '@/types/auth';
 import type { Planet as DBPlanet } from '@/database/models/PlanetModel';
 
 const router = Router();
+
+// Rate limiter for colonization endpoint - stricter limits to prevent abuse
+const colonizeRateLimiter = createRateLimiter({
+  windowMs: 60 * 1000, // 1 minute
+  maxRequests: 10 // Max 10 colonization attempts per minute
+});
 
 // Colonization costs
 const COLONIZATION_COST = {
@@ -112,9 +119,9 @@ router.get('/:id', (req: Request, res: Response) => {
 /**
  * @route   POST /api/game/planets/:id/colonize
  * @desc    Colonize a neutral planet
- * @access  Private
+ * @access  Private (with rate limiting)
  */
-router.post('/:id/colonize', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.post('/:id/colonize', authenticateToken, colonizeRateLimiter, async (req: AuthRequest, res: Response) => {
   try {
     const { id: planetId } = req.params;
     const playerId = req.user!.userId;
