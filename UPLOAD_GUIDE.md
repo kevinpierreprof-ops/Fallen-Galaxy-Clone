@@ -1,4 +1,4 @@
-# How to Upload Large Folders to GitHub / Comment uploader de gros dossiers sur GitHub
+# How to Upload Large Folders to GitHub / Comment téléverser de gros dossiers sur GitHub
 
 ## English Version
 
@@ -61,12 +61,12 @@ That's it! All your files will be uploaded to GitHub, regardless of how many the
 ## Version Française
 
 ### Problème
-Lorsque vous essayez de télécharger plus de 100 fichiers à la fois via l'interface web de GitHub, vous verrez cette erreur :
+Lorsque vous essayez de téléverser plus de 100 fichiers à la fois via l'interface web de GitHub, vous verrez cette erreur :
 > "Yowza, that's a lot of files. Try uploading fewer than 100 at a time."
 
 ### Solution : Utiliser Git en ligne de commande
 
-Au lieu d'utiliser l'interface web, vous pouvez utiliser les commandes Git pour télécharger n'importe quel nombre de fichiers. Voici comment :
+Au lieu d'utiliser l'interface web, vous pouvez utiliser les commandes Git pour téléverser n'importe quel nombre de fichiers. Voici comment :
 
 #### Étape 1 : Installer Git
 1. Téléchargez Git depuis [https://git-scm.com/downloads](https://git-scm.com/downloads)
@@ -89,7 +89,7 @@ cd Fallen-Galaxy-Clone
 #### Étape 4 : Ajouter vos fichiers
 Copiez tous vos fichiers et dossiers dans le répertoire `Fallen-Galaxy-Clone`.
 
-#### Étape 5 : Télécharger vos fichiers
+#### Étape 5 : Téléverser vos fichiers
 ```bash
 # Ajouter tous les fichiers à git
 git add .
@@ -101,7 +101,7 @@ git commit -m "Ajout des fichiers du jeu"
 git push
 ```
 
-C'est tout ! Tous vos fichiers seront téléchargés sur GitHub, peu importe leur nombre.
+C'est tout ! Tous vos fichiers seront téléversés sur GitHub, peu importe leur nombre.
 
 ### Dépannage
 
