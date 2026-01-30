@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnStart.addEventListener('click', () => {
             game.start();
             btnStart.disabled = true;
-            btnPause.disabled = false;
+            if (btnPause) btnPause.disabled = false;
         });
     }
     
@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnReset) {
         btnReset.addEventListener('click', () => {
             game.reset();
-            btnStart.disabled = false;
-            btnPause.disabled = true;
+            if (btnStart) btnStart.disabled = false;
+            if (btnPause) btnPause.disabled = true;
         });
     }
     

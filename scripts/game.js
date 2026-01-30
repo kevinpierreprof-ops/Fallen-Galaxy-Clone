@@ -40,7 +40,8 @@ class Game {
     generatePlanets() {
         // Generate random planets
         this.planets = [];
-        const numPlanets = Math.floor(Math.random() * 10) + 10;
+        const range = CONFIG.game.maxPlanets - CONFIG.game.minPlanets;
+        const numPlanets = Math.floor(Math.random() * range) + CONFIG.game.minPlanets;
         
         for (let i = 0; i < numPlanets; i++) {
             const planet = {
@@ -146,12 +147,17 @@ class Game {
     }
     
     updateUI() {
-        document.getElementById('player-resources').textContent = `Resources: ${this.resources}`;
-        document.getElementById('player-score').textContent = `Score: ${this.score}`;
-        document.getElementById('turn-count').textContent = this.turnCount;
+        const resourcesEl = document.getElementById('player-resources');
+        const scoreEl = document.getElementById('player-score');
+        const turnEl = document.getElementById('turn-count');
+        
+        if (resourcesEl) resourcesEl.textContent = `Resources: ${this.resources}`;
+        if (scoreEl) scoreEl.textContent = `Score: ${this.score}`;
+        if (turnEl) turnEl.textContent = this.turnCount;
     }
     
     updateStatus(status) {
-        document.getElementById('status-text').textContent = status;
+        const statusEl = document.getElementById('status-text');
+        if (statusEl) statusEl.textContent = status;
     }
 }

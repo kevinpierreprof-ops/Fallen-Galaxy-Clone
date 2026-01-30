@@ -7,9 +7,8 @@ const CONFIG = {
     game: {
         initialResources: 1000,
         turnDuration: 1000, // milliseconds
-        maxPlanets: 20,
-        galaxyWidth: 800,
-        galaxyHeight: 600
+        minPlanets: 10,
+        maxPlanets: 20
     },
     colors: {
         background: '#000000',
