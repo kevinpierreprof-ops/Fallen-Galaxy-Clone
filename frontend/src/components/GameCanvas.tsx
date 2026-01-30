@@ -2,12 +2,14 @@ import { useRef, useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import PlanetDetailsModal from './PlanetDetailsModal';
 import type { Planet } from '@shared/types/game';
+import { BuildingType } from '@shared/types/buildingSystem';
 
 export default function GameCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const planets = useGameStore((state) => state.planets);
   const ships = useGameStore((state) => state.ships);
   const colonizePlanet = useGameStore((state) => state.colonizePlanet);
+  const buildBuilding = useGameStore((state) => state.buildBuilding);
   const [selectedPlanet, setSelectedPlanet] = useState<Planet | null>(null);
 
   useEffect(() => {
@@ -110,6 +112,12 @@ export default function GameCanvas() {
     }
   };
 
+  const handleBuildBuilding = (planetId: string, buildingType: BuildingType) => {
+    if (buildBuilding) {
+      buildBuilding(planetId, buildingType);
+    }
+  };
+
   return (
     <>
       <canvas
@@ -123,6 +131,7 @@ export default function GameCanvas() {
         planet={selectedPlanet}
         onClose={() => setSelectedPlanet(null)}
         onColonize={handleColonize}
+        onBuildBuilding={handleBuildBuilding}
         canColonize={true}
       />
     </>
