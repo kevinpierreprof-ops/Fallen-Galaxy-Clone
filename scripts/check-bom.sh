@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 # ==============================================================================
 # BOM Detection and Removal Script
@@ -25,6 +25,7 @@ echo ""
 
 # Files to check
 FILES=(
+    ".editorconfig"
     "backend/package.json"
     "frontend/package.json"
     "package.json"
@@ -42,7 +43,7 @@ for file in "${FILES[@]}"; do
     fi
     
     # Check for BOM
-    if [[ -f "$file" ]] && [[ $(head -c 3 "$file") == "$BOM" ]]; then
+    if [[ $(head -c 3 "$file") == "$BOM" ]]; then
         echo "❌ BOM found in: $file"
         FOUND_BOM=1
         
