@@ -9,6 +9,12 @@ dist/
 build/
 *.tsbuildinfo
 
+# Shared build artifacts
+shared/**/*.js
+shared/**/*.d.ts
+shared/**/*.js.map
+shared/**/*.d.ts.map
+
 # Environment variables
 .env
 .env.local

@@ -4,14 +4,24 @@ import GameCanvas from '../components/GameCanvas';
 import ResourcePanel from '../components/ResourcePanel';
 import ChatPanel from '../components/ChatPanel';
 import PlanetList from '../components/PlanetList';
+import PlanetDetailsModal from '../components/PlanetDetailsModal';
+import type { Planet } from '@shared/types/game';
 
 export default function GamePage() {
-  const { connect, disconnect } = useGameStore();
+  const { connect, disconnect, selectedPlanet, setSelectedPlanet } = useGameStore();
 
   useEffect(() => {
     connect();
     return () => disconnect();
   }, [connect, disconnect]);
+
+  const handlePlanetClick = (planet: Planet) => {
+    setSelectedPlanet(planet);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedPlanet(null);
+  };
 
   return (
     <div className="game-page">
@@ -22,13 +32,18 @@ export default function GamePage() {
         </aside>
 
         <main className="game-canvas-container">
-          <GameCanvas />
+          <GameCanvas onPlanetClick={handlePlanetClick} />
         </main>
 
         <aside className="right-panel">
           <ChatPanel />
         </aside>
       </div>
+
+      <PlanetDetailsModal 
+        planet={selectedPlanet} 
+        onClose={handleCloseModal} 
+      />
     </div>
   );
 }

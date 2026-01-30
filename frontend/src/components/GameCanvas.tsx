@@ -1,10 +1,50 @@
 import { useRef, useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
+import type { Planet } from '@shared/types/game';
 
-export default function GameCanvas() {
+interface GameCanvasProps {
+  onPlanetClick?: (planet: Planet) => void;
+}
+
+export default function GameCanvas({ onPlanetClick }: GameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const planets = useGameStore((state) => state.planets);
   const ships = useGameStore((state) => state.ships);
+
+  // Handle canvas click
+  const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!onPlanetClick) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+
+    // Calculate viewport transformations (same as render logic)
+    const scale = 0.05;
+    const offsetX = canvas.width / 2;
+    const offsetY = canvas.height / 2;
+
+    // Find clicked planet
+    for (const planet of planets) {
+      const planetScreenX = planet.position.x * scale + offsetX;
+      const planetScreenY = planet.position.y * scale + offsetY;
+      const radius = planet.size * 3;
+
+      // Check if click is within planet radius
+      const distance = Math.sqrt(
+        Math.pow(clickX - planetScreenX, 2) + 
+        Math.pow(clickY - planetScreenY, 2)
+      );
+
+      if (distance <= radius) {
+        onPlanetClick(planet);
+        return;
+      }
+    }
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -72,7 +112,8 @@ export default function GameCanvas() {
     <canvas
       ref={canvasRef}
       className="game-canvas"
-      style={{ width: '100%', height: '100%' }}
+      style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+      onClick={handleCanvasClick}
     />
   );
 }

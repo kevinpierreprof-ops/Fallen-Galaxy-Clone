@@ -30,6 +30,7 @@ import { seedDatabase, needsSeeding } from '@/database/seed';
 // Import routes
 import authRoutes from '@/routes/authRoutes';
 import gameRoutes from '@/routes/gameRoutes';
+import planetRoutes from '@/routes/planetRoutes';
 
 // Import middleware
 import { errorHandler } from '@/middleware/errorHandler';
@@ -218,6 +219,13 @@ app.get('/', (req: Request, res: Response) => {
  * Handles user registration, login, and logout
  */
 app.use('/api/auth', authRoutes);
+
+/**
+ * Planet Routes
+ * Handles planet-related API endpoints
+ * NOTE: Must be mounted before general game routes to avoid route conflicts
+ */
+app.use('/api/game/planets', planetRoutes);
 
 /**
  * Game Routes

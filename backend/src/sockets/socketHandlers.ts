@@ -152,6 +152,171 @@ export const setupSocketHandlers = (
   });
 
   // ========================================================================
+  // PLANET COLONIZATION
+  // ========================================================================
+
+  /**
+   * Handle planet colonization via WebSocket
+   */
+  socket.on('planet:colonize', async (data: { planetId: string }) => {
+    try {
+      const playerId = socket.data.playerId || socket.id;
+      const { planetId } = data;
+
+      if (!planetId) {
+        socket.emit('colonize:error', {
+          success: false,
+          error: 'Planet ID is required'
+        });
+        return;
+      }
+
+      // Import planet model
+      const { planetModel } = await import('@/database/models/PlanetModel');
+      
+      // Get planet
+      const dbPlanet = planetModel.findById(planetId);
+      
+      if (!dbPlanet) {
+        socket.emit('colonize:error', {
+          success: false,
+          error: 'Planet not found'
+        });
+        return;
+      }
+      
+      // Check if planet is already owned
+      if (dbPlanet.owner_id) {
+        socket.emit('colonize:error', {
+          success: false,
+          error: 'Planet is already colonized'
+        });
+        return;
+      }
+      
+      // Get player
+      const player = playerManager.getPlayer(playerId);
+      
+      if (!player) {
+        socket.emit('colonize:error', {
+          success: false,
+          error: 'Player not found'
+        });
+        return;
+      }
+      
+      // Colonization costs
+      const COLONIZATION_COST = {
+        minerals: 500,
+        energy: 300,
+        credits: 1000
+      };
+      
+      // Check if player has sufficient resources
+      if (player.resources.minerals < COLONIZATION_COST.minerals) {
+        socket.emit('colonize:error', {
+          success: false,
+          error: 'Insufficient minerals',
+          required: COLONIZATION_COST.minerals,
+          current: player.resources.minerals
+        });
+        return;
+      }
+      
+      if (player.resources.energy < COLONIZATION_COST.energy) {
+        socket.emit('colonize:error', {
+          success: false,
+          error: 'Insufficient energy',
+          required: COLONIZATION_COST.energy,
+          current: player.resources.energy
+        });
+        return;
+      }
+      
+      if (player.resources.credits < COLONIZATION_COST.credits) {
+        socket.emit('colonize:error', {
+          success: false,
+          error: 'Insufficient credits',
+          required: COLONIZATION_COST.credits,
+          current: player.resources.credits
+        });
+        return;
+      }
+      
+      // Deduct resources from player
+      player.resources.minerals -= COLONIZATION_COST.minerals;
+      player.resources.energy -= COLONIZATION_COST.energy;
+      player.resources.credits -= COLONIZATION_COST.credits;
+      
+      // Colonize planet
+      const updatedDbPlanet = planetModel.colonize(planetId, playerId, 100);
+      
+      if (!updatedDbPlanet) {
+        socket.emit('colonize:error', {
+          success: false,
+          error: 'Failed to colonize planet'
+        });
+        return;
+      }
+      
+      // Add planet to player's planets list
+      if (!player.planets.includes(planetId)) {
+        player.planets.push(planetId);
+      }
+      
+      // Transform planet to API format
+      const planet = {
+        id: updatedDbPlanet.id,
+        name: updatedDbPlanet.name,
+        position: {
+          x: updatedDbPlanet.x_position,
+          y: updatedDbPlanet.y_position
+        },
+        size: updatedDbPlanet.size,
+        ownerId: updatedDbPlanet.owner_id,
+        population: updatedDbPlanet.population,
+        resources: {
+          minerals: updatedDbPlanet.minerals,
+          energy: updatedDbPlanet.energy,
+          credits: 0
+        },
+        production: {
+          minerals: updatedDbPlanet.production_minerals,
+          energy: updatedDbPlanet.production_energy,
+          credits: updatedDbPlanet.production_credits
+        },
+        maxPopulation: updatedDbPlanet.max_population,
+        buildings: updatedDbPlanet.buildings_json ? JSON.parse(updatedDbPlanet.buildings_json) : []
+      };
+      
+      // Emit success to client
+      socket.emit('colonize:success', {
+        success: true,
+        planet,
+        player: {
+          id: player.id,
+          resources: player.resources,
+          planets: player.planets
+        }
+      });
+      
+      // Broadcast colonization event to all clients
+      io.emit('planet:colonized', {
+        planet,
+        playerId
+      });
+      
+      logger.info(`Planet ${planet.name} colonized by player ${playerId} via WebSocket`);
+    } catch (error) {
+      logger.error('Error handling planet colonization:', error);
+      socket.emit('colonize:error', {
+        success: false,
+        error: 'Failed to colonize planet'
+      });
+    }
+  });
+
+  // ========================================================================
   // CHAT SYSTEM
   // ========================================================================
 

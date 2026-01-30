@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { io, Socket } from 'socket.io-client';
 import type { Player, Planet, Ship, GameState } from '@shared/types/game';
+import { getPlanets } from '../services/planet';
 
 interface GameStore {
   socket: Socket | null;
@@ -8,11 +9,16 @@ interface GameStore {
   player: Player | null;
   planets: Planet[];
   ships: Ship[];
+  selectedPlanet: Planet | null;
   
   connect: () => void;
   disconnect: () => void;
   sendMessage: (message: string) => void;
   updateGameState: (state: GameState) => void;
+  setSelectedPlanet: (planet: Planet | null) => void;
+  colonizePlanet: (planetId: string) => void;
+  updatePlanetsList: (planets: Planet[]) => void;
+  fetchPlanets: () => Promise<void>;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -21,6 +27,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   player: null,
   planets: [],
   ships: [],
+  selectedPlanet: null,
 
   connect: () => {
     const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000');
@@ -33,6 +40,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       socket.emit('player:join', {
         name: `Player_${Math.random().toString(36).substring(7)}`
       });
+
+      // Fetch initial planets list
+      get().fetchPlanets();
     });
 
     socket.on('player:joined', (data) => {
@@ -46,6 +56,55 @@ export const useGameStore = create<GameStore>((set, get) => ({
     socket.on('disconnect', () => {
       console.log('Disconnected from server');
       set({ connected: false });
+    });
+
+    // Listen for colonization success
+    socket.on('colonize:success', (data: { success: boolean; planet: Planet; player: Partial<Player> }) => {
+      console.log('Colonization successful', data);
+      
+      // Update planets list
+      const { planets } = get();
+      const updatedPlanets = planets.map(p => 
+        p.id === data.planet.id ? data.planet : p
+      );
+      set({ planets: updatedPlanets });
+      
+      // Update player resources if provided
+      if (data.player && data.player.resources) {
+        const { player } = get();
+        if (player) {
+          set({ 
+            player: { 
+              ...player, 
+              resources: data.player.resources,
+              planets: data.player.planets || player.planets
+            } 
+          });
+        }
+      }
+
+      // Close the modal on successful colonization
+      set({ selectedPlanet: null });
+    });
+
+    // Listen for colonization errors
+    socket.on('colonize:error', (data: { success: boolean; error: string }) => {
+      console.error('Colonization failed:', data.error);
+      // TODO: Replace with proper toast notification system
+      // For now, we'll keep using alert as it's better than nothing
+      alert(`Failed to colonize planet: ${data.error}`);
+    });
+
+    // Listen for planet colonization broadcasts
+    socket.on('planet:colonized', (data: { planet: Planet; playerId: string }) => {
+      console.log('Planet colonized by player', data.playerId);
+      
+      // Update planets list
+      const { planets } = get();
+      const updatedPlanets = planets.map(p => 
+        p.id === data.planet.id ? data.planet : p
+      );
+      set({ planets: updatedPlanets });
     });
   },
 
@@ -76,5 +135,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
       planets: state.planets,
       ships: state.ships
     });
+  },
+
+  setSelectedPlanet: (planet: Planet | null) => {
+    set({ selectedPlanet: planet });
+  },
+
+  colonizePlanet: (planetId: string) => {
+    const { socket } = get();
+    if (socket) {
+      socket.emit('planet:colonize', { planetId });
+    }
+  },
+
+  updatePlanetsList: (planets: Planet[]) => {
+    set({ planets });
+  },
+
+  fetchPlanets: async () => {
+    try {
+      const response = await getPlanets();
+      if (response.success && response.planets) {
+        set({ planets: response.planets });
+      }
+    } catch (error) {
+      console.error('Failed to fetch planets:', error);
+    }
   }
 }));
