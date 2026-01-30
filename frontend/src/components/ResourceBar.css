@@ -1,0 +1,142 @@
+/**
+ * Resource Bar Styles
+ */
+
+.resource-bar {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.resource-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.resource-item:hover {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-2px);
+}
+
+.resource-icon {
+  font-size: 24px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.resource-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 100px;
+  position: relative;
+}
+
+.resource-amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: #e0e7ff;
+  font-family: 'Courier New', monospace;
+}
+
+.resource-max {
+  font-size: 12px;
+  font-weight: 400;
+  color: #94a3b8;
+  margin-left: 4px;
+}
+
+.resource-income {
+  font-size: 11px;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.resource-label {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.resource-storage-bar {
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 2px;
+  transition: background 0.3s ease;
+}
+
+/* Icon Colors */
+.resource-icon.minerals {
+  color: #94a3b8;
+}
+
+.resource-icon.energy {
+  color: #fbbf24;
+}
+
+.resource-icon.credits {
+  color: #22c55e;
+}
+
+.resource-icon.population {
+  color: #60a5fa;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .resource-bar {
+    gap: 12px;
+  }
+
+  .resource-item {
+    padding: 6px 10px;
+  }
+
+  .resource-info {
+    min-width: 80px;
+  }
+
+  .resource-amount {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .resource-bar {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .resource-item {
+    flex: 1 1 auto;
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .resource-icon {
+    font-size: 20px;
+  }
+
+  .resource-amount {
+    font-size: 13px;
+  }
+
+  .resource-max {
+    font-size: 10px;
+  }
+
+  .resource-income {
+    font-size: 10px;
+  }
+}

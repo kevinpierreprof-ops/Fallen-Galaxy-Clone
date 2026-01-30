@@ -1,0 +1,83 @@
+/**
+ * Quick Actions Styles
+ */
+
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quick-action-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  border-radius: 6px;
+  color: #e0e7ff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 140px;
+}
+
+.quick-action-btn:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.6);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.quick-action-btn:active {
+  transform: translateX(2px) scale(0.98);
+}
+
+.action-icon {
+  font-size: 20px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.action-label {
+  flex: 1;
+}
+
+/* Messages Button with Badge */
+.messages-btn {
+  position: relative;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .quick-action-btn {
+    min-width: 120px;
+    padding: 8px 12px;
+  }
+
+  .action-label {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .quick-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .quick-action-btn {
+    flex: 1 1 auto;
+    min-width: 100px;
+  }
+
+  .action-label {
+    display: none;
+  }
+
+  .action-icon {
+    margin: 0 auto;
+  }
+}

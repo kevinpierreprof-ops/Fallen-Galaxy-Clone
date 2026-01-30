@@ -1,0 +1,199 @@
+/**
+ * Game HUD Styles
+ * 
+ * Main HUD container and layout
+ */
+
+.game-hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.game-hud > * {
+  pointer-events: auto;
+}
+
+/* Top Bar */
+.hud-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+.hud-left,
+.hud-center,
+.hud-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hud-left {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.hud-center {
+  flex: 0 0 auto;
+}
+
+.hud-right {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+/* Quick Actions Bar */
+.hud-quick-actions {
+  position: absolute;
+  left: 20px;
+  top: 90px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+/* Minimap */
+.hud-minimap {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+
+/* Logout Button */
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  color: #fca5a5;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-button .icon {
+  font-size: 18px;
+}
+
+.logout-button:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Collapse Toggle */
+.hud-collapse-toggle {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  width: 40px;
+  height: 24px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 4px;
+  color: #60a5fa;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 101;
+}
+
+.hud-collapse-toggle:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+/* Collapsed State */
+.game-hud.collapsed .hud-top-bar {
+  transform: translateY(-100%);
+}
+
+.game-hud.collapsed .hud-quick-actions {
+  transform: translateX(-100%);
+}
+
+.game-hud.collapsed .hud-minimap {
+  transform: translateY(100%);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .hud-top-bar {
+    padding: 0 12px;
+  }
+
+  .hud-quick-actions {
+    left: 12px;
+    top: 82px;
+  }
+
+  .hud-minimap {
+    right: 12px;
+    bottom: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hud-top-bar {
+    height: auto;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .hud-left,
+  .hud-center,
+  .hud-right {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hud-quick-actions {
+    left: 8px;
+    top: auto;
+    bottom: 220px;
+  }
+
+  .hud-minimap {
+    right: 8px;
+    bottom: 8px;
+  }
+
+  .logout-button .label {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hud-top-bar {
+    font-size: 12px;
+  }
+
+  .hud-collapse-toggle {
+    top: 4px;
+    right: 4px;
+  }
+}

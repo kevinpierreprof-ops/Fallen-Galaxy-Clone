@@ -1,0 +1,167 @@
+﻿{
+  "folders": [
+    {
+      "name": "🚀 Space Strategy Game",
+      "path": "."
+    },
+    {
+      "name": "⚙️ Backend",
+      "path": "./backend"
+    },
+    {
+      "name": "🎨 Frontend",
+      "path": "./frontend"
+    },
+    {
+      "name": "📦 Shared",
+      "path": "./shared"
+    }
+  ],
+  "settings": {
+    // TypeScript
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "typescript.preferences.importModuleSpecifier": "non-relative",
+    "typescript.preferences.importModuleSpecifierEnding": "auto",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "typescript.suggest.autoImports": true,
+    "typescript.suggest.paths": true,
+
+    // Editor
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true,
+      "source.organizeImports": true
+    },
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.rulers": [100],
+
+    // Files
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/.git": true,
+      "**/logs": true
+    },
+    "files.watcherExclude": {
+      "**/node_modules/**": true,
+      "**/dist/**": true
+    },
+    "files.eol": "\n",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+
+    // Search
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/logs": true,
+      "**/*.lock": true
+    },
+
+    // ESLint
+    "eslint.validate": [
+      "javascript",
+      "typescript",
+      "javascriptreact",
+      "typescriptreact"
+    ],
+    "eslint.workingDirectories": [
+      "./backend",
+      "./frontend"
+    ],
+
+    // Prettier
+    "prettier.requireConfig": false,
+    "prettier.singleQuote": true,
+    "prettier.trailingComma": "es5",
+    "prettier.tabWidth": 2,
+    "prettier.semi": true,
+
+    // Extensions recommendations
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "ms-vscode.vscode-typescript-next",
+      "firsttris.vscode-jest-runner",
+      "orta.vscode-jest",
+      "usernamehw.errorlens",
+      "christian-kohler.path-intellisense",
+      "eamodio.gitlens",
+      "ms-azuretools.vscode-docker"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "🔧 Debug Backend",
+        "runtimeArgs": [
+          "-r",
+          "ts-node/register",
+          "-r",
+          "tsconfig-paths/register"
+        ],
+        "args": ["${workspaceFolder:⚙️ Backend}/src/server.ts"],
+        "cwd": "${workspaceFolder:⚙️ Backend}",
+        "env": {
+          "NODE_ENV": "development"
+        },
+        "sourceMaps": true,
+        "smartStep": true,
+        "outFiles": ["${workspaceFolder:⚙️ Backend}/dist/**/*.js"],
+        "skipFiles": ["<node_internals>/**"],
+        "console": "integratedTerminal"
+      },
+      {
+        "type": "chrome",
+        "request": "launch",
+        "name": "🎨 Debug Frontend (Chrome)",
+        "url": "http://localhost:5173",
+        "webRoot": "${workspaceFolder:🎨 Frontend}/src",
+        "sourceMaps": true,
+        "sourceMapPathOverrides": {
+          "webpack:///src/*": "${webRoot}/*"
+        }
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "🧪 Debug Backend Tests",
+        "program": "${workspaceFolder:⚙️ Backend}/node_modules/.bin/jest",
+        "args": [
+          "--runInBand",
+          "--no-cache",
+          "--watchAll=false"
+        ],
+        "cwd": "${workspaceFolder:⚙️ Backend}",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      }
+    ],
+    "compounds": [
+      {
+        "name": "🚀 Full Stack",
+        "configurations": [
+          "🔧 Debug Backend",
+          "🎨 Debug Frontend (Chrome)"
+        ]
+      }
+    ]
+  }
+}

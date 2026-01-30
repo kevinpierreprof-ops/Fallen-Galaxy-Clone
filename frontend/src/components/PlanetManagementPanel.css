@@ -1,0 +1,585 @@
+/**
+ * Planet Management Panel Styles
+ * 
+ * Responsive CSS for planet management UI
+ */
+
+.planet-management-panel {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-radius: 12px;
+  padding: 24px;
+  color: #e2e8f0;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.panel-header {
+  margin-bottom: 24px;
+}
+
+.planet-info h2 {
+  font-size: 28px;
+  margin: 0 0 8px 0;
+  color: #f1f5f9;
+  font-weight: 700;
+}
+
+.planet-coords,
+.planet-type {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 4px 0;
+}
+
+/* Resource Display */
+.resource-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 8px;
+  border: 1px solid #334155;
+}
+
+.resource-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(30, 41, 59, 0.6);
+  border-radius: 6px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.resource-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.resource-icon {
+  font-size: 32px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.resource-details {
+  flex: 1;
+}
+
+.resource-amount {
+  font-size: 20px;
+  font-weight: 700;
+  color: #60a5fa;
+  font-family: 'Courier New', monospace;
+}
+
+.resource-production {
+  font-size: 12px;
+  color: #22c55e;
+  margin-top: 2px;
+}
+
+/* Tabs */
+.panel-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #334155;
+}
+
+.tab-button {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.tab-button:hover {
+  color: #e2e8f0;
+}
+
+.tab-button.active {
+  color: #60a5fa;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #60a5fa;
+}
+
+/* Panel Content */
+.panel-content {
+  min-height: 400px;
+}
+
+/* Buildings List */
+.buildings-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.building-card {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.building-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border-color: #475569;
+}
+
+.building-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.building-icon {
+  font-size: 36px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.building-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  color: #f1f5f9;
+}
+
+.building-description {
+  margin: 0;
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.building-stats {
+  background: rgba(15, 23, 42, 0.5);
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.building-level {
+  font-weight: 700;
+  color: #fbbf24;
+  margin-bottom: 8px;
+}
+
+.building-production {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  color: #22c55e;
+}
+
+.building-production span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.building-cost {
+  margin-bottom: 12px;
+}
+
+.cost-label {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.cost-items {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cost-item {
+  padding: 4px 12px;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cost-item.disabled {
+  opacity: 0.5;
+}
+
+.build-button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.build-button:hover:not(.disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.build-button.disabled {
+  background: #475569;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Ship Construction Panel */
+.ship-construction-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.ship-card {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ship-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border-color: #475569;
+}
+
+.ship-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.ship-icon {
+  font-size: 36px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.ship-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  color: #f1f5f9;
+}
+
+.ship-description {
+  margin: 0;
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.ship-stats {
+  background: rgba(15, 23, 42, 0.5);
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.stat-item:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.stat-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #60a5fa;
+}
+
+.ship-cost {
+  margin-bottom: 12px;
+}
+
+.build-time {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #fbbf24;
+}
+
+.construct-button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.construct-button:hover:not(.disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.construct-button.disabled {
+  background: #475569;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Construction Queue */
+.construction-queue {
+  max-width: 800px;
+}
+
+.queue-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #64748b;
+}
+
+.queue-empty p {
+  font-size: 18px;
+  margin: 0;
+}
+
+.queue-section {
+  margin-bottom: 32px;
+}
+
+.queue-section h3 {
+  font-size: 20px;
+  color: #f1f5f9;
+  margin: 0 0 16px 0;
+}
+
+.queue-item {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.queue-item-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.queue-position {
+  background: #3b82f6;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.queue-item-name {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.queue-time {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.progress-bar {
+  height: 8px;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.cancel-button {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid #ef4444;
+  border-radius: 4px;
+  color: #ef4444;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.cancel-button:hover {
+  background: #ef4444;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .planet-management-panel {
+    padding: 16px;
+  }
+
+  .resource-display {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .buildings-list,
+  .ship-construction-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-tabs {
+    overflow-x: auto;
+  }
+
+  .tab-button {
+    padding: 10px 16px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .building-card,
+  .ship-card {
+    padding: 16px;
+  }
+
+  .building-icon,
+  .ship-icon {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .planet-info h2 {
+    font-size: 22px;
+  }
+
+  .resource-amount {
+    font-size: 18px;
+  }
+
+  .cost-items {
+    justify-content: space-between;
+  }
+
+  .queue-item-header {
+    flex-wrap: wrap;
+  }
+
+  .queue-position {
+    order: 1;
+  }
+
+  .queue-item-name {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .queue-time {
+    order: 2;
+  }
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.building-card,
+.ship-card,
+.queue-item {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Loading State */
+.loading-state {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(59, 130, 246, 0.2);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scrollbar Styling */
+.panel-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 4px;
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+.panel-content::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}

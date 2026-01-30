@@ -1,0 +1,31 @@
+{
+  "name": "space-strategy-game",
+  "version": "1.0.0",
+  "description": "Full-stack space strategy game with real-time multiplayer",
+  "scripts": {
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "build": "npm run build:backend && npm run build:frontend",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
+  },
+  "keywords": [
+    "game",
+    "strategy",
+    "multiplayer",
+    "space"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.58.0",
+    "concurrently": "^8.2.2"
+  }
+}

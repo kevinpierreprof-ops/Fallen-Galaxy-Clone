@@ -1,0 +1,29 @@
+name: Check BOM
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+jobs:
+  check-bom:
+    runs-on: ubuntu-latest
+    name: Check for BOM in files
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Make script executable
+        run: chmod +x scripts/check-bom.sh
+      
+      - name: Check for BOM
+        run: ./scripts/check-bom.sh
+      
+      - name: Report
+        if: failure()
+        run: |
+          echo "❌ BOM detected in one or more files!"
+          echo "Run './scripts/check-bom.sh --fix' to remove them."
+          exit 1

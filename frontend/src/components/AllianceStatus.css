@@ -1,0 +1,65 @@
+/**
+ * Alliance Status Styles
+ */
+
+.alliance-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 2px solid rgba(34, 197, 94, 0.3);
+  border-radius: 6px;
+  color: #e0e7ff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.alliance-status:hover {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+.alliance-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alliance-tag {
+  font-size: 16px;
+  font-weight: 900;
+  color: #22c55e;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+.alliance-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.alliance-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0e7ff;
+}
+
+.alliance-members {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .alliance-info {
+    display: none;
+  }
+
+  .alliance-status {
+    padding: 8px 12px;
+  }
+}

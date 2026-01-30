@@ -1,0 +1,23 @@
+﻿# Development Dockerfile for Backend
+FROM node:18-alpine
+
+WORKDIR /app/backend
+
+# Install development dependencies
+RUN apk add --no-cache python3 make g++
+
+# Copy package files
+COPY backend/package*.json ./
+COPY backend/tsconfig.json ./
+
+# Install all dependencies (including dev)
+RUN npm install
+
+# Copy shared types
+COPY shared /app/shared
+
+# Expose port and debugger port
+EXPOSE 3000 9229
+
+# Start with nodemon for hot reload
+CMD ["npm", "run", "dev"]
