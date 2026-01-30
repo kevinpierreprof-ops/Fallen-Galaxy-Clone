@@ -1,10 +1,16 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
+import PlanetDetailsModal from './PlanetDetailsModal';
+import type { Planet } from '@shared/types/game';
+import { BuildingType } from '@shared/types/buildingSystem';
 
 export default function GameCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const planets = useGameStore((state) => state.planets);
   const ships = useGameStore((state) => state.ships);
+  const colonizePlanet = useGameStore((state) => state.colonizePlanet);
+  const buildBuilding = useGameStore((state) => state.buildBuilding);
+  const [selectedPlanet, setSelectedPlanet] = useState<Planet | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -68,11 +74,66 @@ export default function GameCanvas() {
     });
   }, [planets, ships]);
 
+  // Handle canvas clicks for planet selection
+  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+
+    // Calculate viewport
+    const scale = 0.05;
+    const offsetX = canvas.width / 2;
+    const offsetY = canvas.height / 2;
+
+    // Check if click is on any planet
+    for (const planet of planets) {
+      const planetX = planet.position.x * scale + offsetX;
+      const planetY = planet.position.y * scale + offsetY;
+      const radius = planet.size * 3;
+
+      const dx = clickX - planetX;
+      const dy = clickY - planetY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance <= radius) {
+        setSelectedPlanet(planet);
+        break;
+      }
+    }
+  };
+
+  const handleColonize = (planetId: string) => {
+    if (colonizePlanet) {
+      colonizePlanet(planetId);
+      setSelectedPlanet(null);
+    }
+  };
+
+  const handleBuildBuilding = (planetId: string, buildingType: BuildingType) => {
+    if (buildBuilding) {
+      buildBuilding(planetId, buildingType);
+    }
+  };
+
   return (
-    <canvas
-      ref={canvasRef}
-      className="game-canvas"
-      style={{ width: '100%', height: '100%' }}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className="game-canvas"
+        style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+        onClick={handleCanvasClick}
+      />
+      
+      <PlanetDetailsModal
+        planet={selectedPlanet}
+        onClose={() => setSelectedPlanet(null)}
+        onColonize={handleColonize}
+        onBuildBuilding={handleBuildBuilding}
+        canColonize={true}
+      />
+    </>
   );
 }

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { io, Socket } from 'socket.io-client';
 import type { Player, Planet, Ship, GameState } from '@shared/types/game';
+import { BuildingType } from '@shared/types/buildingSystem';
 
 interface GameStore {
   socket: Socket | null;
@@ -8,11 +9,15 @@ interface GameStore {
   player: Player | null;
   planets: Planet[];
   ships: Ship[];
+  selectedPlanet: Planet | null;
   
   connect: () => void;
   disconnect: () => void;
   sendMessage: (message: string) => void;
   updateGameState: (state: GameState) => void;
+  setSelectedPlanet: (planet: Planet | null) => void;
+  colonizePlanet: (planetId: string) => void;
+  buildBuilding: (planetId: string, buildingType: BuildingType) => void;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -21,6 +26,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   player: null,
   planets: [],
   ships: [],
+  selectedPlanet: null,
 
   connect: () => {
     const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000');
@@ -41,6 +47,39 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     socket.on('game:update', (gameState: GameState) => {
       get().updateGameState(gameState);
+    });
+
+    socket.on('planet:colonized', (data: { planetId: string; ownerId: string; planet: Planet }) => {
+      console.log('Planet colonized:', data);
+      // Update planets in state
+      set((state) => ({
+        planets: state.planets.map((p) =>
+          p.id === data.planetId ? { ...p, ownerId: data.ownerId } : p
+        ),
+      }));
+    });
+
+    socket.on('colonize:success', (data: { planet: Planet; resources: any }) => {
+      console.log('Colonization successful!', data);
+      // Update player resources
+      set((state) => ({
+        player: state.player ? { ...state.player, resources: data.resources } : null,
+      }));
+    });
+
+    socket.on('building:started', (data: any) => {
+      console.log('Building construction started:', data);
+      // TODO: Update construction queue
+    });
+
+    socket.on('building:completed', (data: any) => {
+      console.log('Building completed:', data);
+      // TODO: Update planet buildings
+    });
+
+    socket.on('error', (error: { message: string }) => {
+      console.error('Socket error:', error);
+      alert(error.message);
     });
 
     socket.on('disconnect', () => {
@@ -76,5 +115,29 @@ export const useGameStore = create<GameStore>((set, get) => ({
       planets: state.planets,
       ships: state.ships
     });
+  },
+
+  setSelectedPlanet: (planet) => set({ selectedPlanet: planet }),
+
+  colonizePlanet: (planetId: string) => {
+    const { socket } = get();
+    if (!socket) {
+      console.error('No socket connection');
+      return;
+    }
+
+    console.log('Attempting to colonize planet:', planetId);
+    socket.emit('planet:colonize', { planetId });
+  },
+
+  buildBuilding: (planetId: string, buildingType: BuildingType) => {
+    const { socket } = get();
+    if (!socket) {
+      console.error('No socket connection');
+      return;
+    }
+
+    console.log('Attempting to build building:', buildingType, 'on planet:', planetId);
+    socket.emit('building:construct', { planetId, buildingType });
   }
 }));

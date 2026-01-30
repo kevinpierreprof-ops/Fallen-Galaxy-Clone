@@ -156,6 +156,166 @@ export const setupSocketHandlers = (
   // ========================================================================
 
   /**
+   * Handle planet colonization
+   */
+  socket.on('planet:colonize', async (data: { planetId: string }) => {
+    try {
+      const { planetId } = data;
+      const playerId = socket.id;
+
+      logger.debug(`Player ${playerId} attempting to colonize planet ${planetId}`);
+
+      // Get player
+      const player = playerManager.getPlayer(playerId);
+      if (!player) {
+        socket.emit('error', {
+          message: 'Player not found',
+          code: 'PLAYER_NOT_FOUND'
+        });
+        return;
+      }
+
+      // Get planet from game state
+      const gameState = gameManager.getGameState();
+      const planet = gameState.planets.find((p: any) => p.id === planetId);
+
+      if (!planet) {
+        socket.emit('error', {
+          message: 'Planet not found',
+          code: 'PLANET_NOT_FOUND'
+        });
+        return;
+      }
+
+      if (planet.ownerId) {
+        socket.emit('error', {
+          message: 'Planet already colonized',
+          code: 'PLANET_ALREADY_OWNED'
+        });
+        return;
+      }
+
+      // Check resources (cost: 500 minerals, 300 energy, 1000 credits)
+      if (
+        player.resources.minerals < 500 ||
+        player.resources.energy < 300 ||
+        player.resources.credits < 1000
+      ) {
+        socket.emit('error', {
+          message: 'Insufficient resources to colonize this planet',
+          code: 'INSUFFICIENT_RESOURCES',
+          required: { minerals: 500, energy: 300, credits: 1000 },
+          current: player.resources
+        });
+        return;
+      }
+
+      // Colonize planet
+      planet.ownerId = playerId;
+      player.resources.minerals -= 500;
+      player.resources.energy -= 300;
+      player.resources.credits -= 1000;
+      
+      if (!player.planets.includes(planetId)) {
+        player.planets.push(planetId);
+      }
+
+      // Broadcast to all players
+      io.emit('planet:colonized', {
+        planetId,
+        ownerId: playerId,
+        planet,
+        timestamp: Date.now()
+      });
+
+      // Send success to colonizing player
+      socket.emit('colonize:success', {
+        planet,
+        resources: player.resources
+      });
+
+      logger.info(`✓ Player ${playerId} colonized planet ${planetId}`);
+    } catch (error) {
+      logger.error('Error colonizing planet:', error);
+      socket.emit('error', {
+        message: 'Failed to colonize planet',
+        code: 'COLONIZE_FAILED'
+      });
+    }
+  });
+
+  /**
+   * Handle building construction
+   */
+  socket.on('building:construct', async (data: { planetId: string; buildingType: string }) => {
+    try {
+      const { planetId, buildingType } = data;
+      const playerId = socket.id;
+
+      logger.debug(`Player ${playerId} attempting to build ${buildingType} on planet ${planetId}`);
+
+      // Get player
+      const player = playerManager.getPlayer(playerId);
+      if (!player) {
+        socket.emit('error', {
+          message: 'Player not found',
+          code: 'PLAYER_NOT_FOUND'
+        });
+        return;
+      }
+
+      // Get planet from game state
+      const gameState = gameManager.getGameState();
+      const planet = gameState.planets.find((p: any) => p.id === planetId);
+
+      if (!planet) {
+        socket.emit('error', {
+          message: 'Planet not found',
+          code: 'PLANET_NOT_FOUND'
+        });
+        return;
+      }
+
+      // Check planet ownership
+      if (planet.ownerId !== playerId) {
+        socket.emit('error', {
+          message: 'You do not own this planet',
+          code: 'NOT_PLANET_OWNER'
+        });
+        return;
+      }
+
+      // TODO: Check resources and add to construction queue
+      // For now, just acknowledge the request
+      socket.emit('building:started', {
+        planetId,
+        buildingType,
+        timestamp: Date.now()
+      });
+
+      // Broadcast to all players
+      io.emit('building:construction:started', {
+        planetId,
+        buildingType,
+        playerId,
+        timestamp: Date.now()
+      });
+
+      logger.info(`✓ Player ${playerId} started building ${buildingType} on planet ${planetId}`);
+    } catch (error) {
+      logger.error('Error constructing building:', error);
+      socket.emit('error', {
+        message: 'Failed to construct building',
+        code: 'BUILD_FAILED'
+      });
+    }
+  });
+
+  // ========================================================================
+  // CHAT SYSTEM
+  // ========================================================================
+
+  /**
    * Handle chat messages
    */
   socket.on('chat:message', (message: { text: string; channelId?: string }) => {
