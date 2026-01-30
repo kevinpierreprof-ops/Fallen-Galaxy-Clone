@@ -114,4 +114,155 @@ router.get('/leaderboard', (req: Request, res: Response) => {
   });
 });
 
+/**
+ * @route   GET /api/game/planets
+ * @desc    Get all planets
+ * @access  Public
+ */
+router.get('/planets', (req: Request, res: Response) => {
+  const { gameManager } = req.app.locals;
+  
+  try {
+    const gameState = gameManager.getGameState();
+    
+    res.json({
+      count: gameState.planets.length,
+      planets: gameState.planets
+    });
+  } catch (error) {
+    logger.error('Error fetching planets:', error);
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: 'Failed to fetch planets'
+    });
+  }
+});
+
+/**
+ * @route   GET /api/game/planets/:id
+ * @desc    Get planet details
+ * @access  Public
+ */
+router.get('/planets/:id', (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { gameManager } = req.app.locals;
+  
+  try {
+    const gameState = gameManager.getGameState();
+    const planet = gameState.planets.find((p: any) => p.id === id);
+
+    if (!planet) {
+      return res.status(404).json({
+        error: 'Planet not found'
+      });
+    }
+
+    res.json(planet);
+  } catch (error) {
+    logger.error('Error fetching planet:', error);
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: 'Failed to fetch planet'
+    });
+  }
+});
+
+/**
+ * @route   POST /api/game/planets/:id/colonize
+ * @desc    Colonize a planet
+ * @access  Private (requires authentication or player session)
+ */
+router.post('/planets/:id/colonize', (req: Request, res: Response) => {
+  const { id: planetId } = req.params;
+  const { gameManager, playerManager, io } = req.app.locals;
+  
+  try {
+    // Get player ID from authenticated request or session
+    // For now, using a header or body parameter
+    const playerId = (req as any).userId || req.body.playerId || req.headers['x-player-id'];
+    
+    if (!playerId) {
+      return res.status(401).json({
+        error: 'Unauthorized',
+        message: 'Player ID required'
+      });
+    }
+    
+    const player = playerManager.getPlayer(playerId);
+    
+    if (!player) {
+      return res.status(404).json({
+        error: 'Player not found'
+      });
+    }
+
+    // Get planet from game state
+    const gameState = gameManager.getGameState();
+    const planet = gameState.planets.find((p: any) => p.id === planetId);
+
+    if (!planet) {
+      return res.status(404).json({
+        error: 'Planet not found'
+      });
+    }
+
+    if (planet.ownerId) {
+      return res.status(400).json({
+        error: 'Planet already colonized',
+        ownerId: planet.ownerId
+      });
+    }
+
+    // Check resources (cost: 500 minerals, 300 energy, 1000 credits)
+    if (
+      player.resources.minerals < 500 ||
+      player.resources.energy < 300 ||
+      player.resources.credits < 1000
+    ) {
+      return res.status(400).json({
+        error: 'Insufficient resources',
+        required: {
+          minerals: 500,
+          energy: 300,
+          credits: 1000
+        },
+        current: player.resources
+      });
+    }
+
+    // Colonize planet
+    planet.ownerId = playerId;
+    player.resources.minerals -= 500;
+    player.resources.energy -= 300;
+    player.resources.credits -= 1000;
+    
+    if (!player.planets.includes(planetId)) {
+      player.planets.push(planetId);
+    }
+
+    // Broadcast update
+    io.emit('planet:colonized', {
+      planetId,
+      ownerId: playerId,
+      planet,
+      timestamp: Date.now()
+    });
+
+    res.json({
+      success: true,
+      planet,
+      resources: player.resources,
+      message: 'Planet colonized successfully'
+    });
+
+    logger.info(`Player ${playerId} colonized planet ${planetId}`);
+  } catch (error) {
+    logger.error('Error colonizing planet:', error);
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: 'Failed to colonize planet'
+    });
+  }
+});
+
 export default router;
