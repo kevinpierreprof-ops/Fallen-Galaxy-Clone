@@ -4,6 +4,7 @@
  * Comprehensive tests for ships and fleets
  */
 
+import { describe, it, expect, beforeEach } from '@jest/globals';
 import { ShipClass } from '../Ship';
 import { FleetManager } from '../FleetManager';
 import { ShipType, ShipStatus } from '@shared/types/ships';

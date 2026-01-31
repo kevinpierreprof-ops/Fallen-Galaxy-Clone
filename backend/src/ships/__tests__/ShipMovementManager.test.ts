@@ -4,6 +4,7 @@
  * Comprehensive tests for ship movement system
  */
 
+import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import { ShipMovementManager } from '../ShipMovementManager';
 import { ShipClass } from '../Ship';
 import { Planet } from '@/planets/Planet';

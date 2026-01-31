@@ -37,31 +37,17 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(CYAN)%-15s$(NC) %s\n", $$1, $$2}'
 	@echo ""
 
-.PHONY: check-bom
-check-bom: ## 🔍 Check for BOM in JSON/TS files
-	@chmod +x scripts/check-bom.sh
-	@./scripts/check-bom.sh
-
-.PHONY: fix-bom
-fix-bom: ## 🔧 Remove BOM from all files
-	@chmod +x scripts/check-bom.sh
-	@./scripts/check-bom.sh --fix
-
 .PHONY: fix
 fix: ## 🔧 COMPLETE FIX - Stop, clean, rebuild, start (ONE COMMAND SOLUTION)
 	@echo -e "$(CYAN)╔════════════════════════════════════════════════════════════════╗$(NC)"
 	@echo -e "$(CYAN)║$(NC) $(MAGENTA)Complete Docker Fix - This will solve everything$(NC)"
 	@echo -e "$(CYAN)╚════════════════════════════════════════════════════════════════╝$(NC)"
 	@echo ""
-	@echo -e "$(YELLOW)Step 0/6: Checking for BOM...$(NC)"
-	@make check-bom || make fix-bom
-	@echo -e "$(GREEN)✓ BOM check complete$(NC)"
-	@echo ""
-	@echo -e "$(YELLOW)Step 1/6: Stopping all containers...$(NC)"
+	@echo -e "$(YELLOW)Step 1/5: Stopping all containers...$(NC)"
 	-@$(COMPOSE) down -v --remove-orphans 2>/dev/null || true
 	@echo -e "$(GREEN)✓ Containers stopped$(NC)"
 	@echo ""
-	@echo -e "$(YELLOW)Step 2/6: Deep cleaning Docker resources...$(NC)"
+	@echo -e "$(YELLOW)Step 2/5: Deep cleaning Docker resources...$(NC)"
 	@$(MAKE) -s clean
 	@echo -e "$(GREEN)✓ Docker cleaned$(NC)"
 	@echo ""

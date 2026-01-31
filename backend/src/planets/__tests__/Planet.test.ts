@@ -4,8 +4,9 @@
  * Comprehensive tests for the Planet class functionality
  */
 
+import { describe, it, expect, beforeEach } from '@jest/globals';
 import { Planet } from '../Planet';
-import { BuildingType } from '@shared/types/buildings';
+import type { BuildingType } from '@shared/types/buildings';
 import { BUILDINGS } from '@shared/constants/buildings';
 
 describe('Planet Class', () => {

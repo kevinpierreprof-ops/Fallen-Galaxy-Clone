@@ -1,0 +1,38 @@
+﻿{
+  // Force UTF-8 encoding without BOM for ALL files
+  "files.encoding": "utf8",
+  "files.autoGuessEncoding": false,
+  
+  // Ensure JSON files never have BOM
+  "[json]": {
+    "files.encoding": "utf8"
+  },
+  
+  "[jsonc]": {
+    "files.encoding": "utf8"
+  },
+  
+  "[typescript]": {
+    "files.encoding": "utf8"
+  },
+  
+  "[javascript]": {
+    "files.encoding": "utf8"
+  },
+  
+  // Fix line endings to LF (Unix style) for consistency
+  "files.eol": "\n",
+  
+  // Remove trailing whitespace
+  "files.trimTrailingWhitespace": true,
+  
+  // Insert final newline
+  "files.insertFinalNewline": true,
+  
+  // Exclude node_modules and build directories
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.git": true
+  }
+}

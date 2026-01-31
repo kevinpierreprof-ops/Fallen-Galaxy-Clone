@@ -4,9 +4,10 @@
  * Comprehensive tests for galaxy map generation
  */
 
+import { describe, it, expect, beforeEach } from '@jest/globals';
 import { GalaxyMapGenerator } from '../GalaxyMapGenerator';
 import { SeededRandom } from '@/utils/SeededRandom';
-import { GalaxyMapConfig } from '@shared/types/galaxyMap';
+import type { GalaxyMapConfig } from '@shared/types/galaxyMap';
 
 describe('Galaxy Map Generator', () => {
   describe('SeededRandom', () => {

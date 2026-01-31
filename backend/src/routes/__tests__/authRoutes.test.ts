@@ -4,6 +4,7 @@
  * Tests for authentication endpoints
  */
 
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import request from 'supertest';
 import { app } from '../../../server';
 import { userModel } from '../../../database/models/UserModel';

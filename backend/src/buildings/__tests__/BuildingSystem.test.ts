@@ -5,6 +5,7 @@
  * construction, upgrades, queues, and resource management.
  */
 
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { buildingSystem } from '../BuildingSystem';
 import { constructionQueueManager } from '../ConstructionQueueManager';
 import { BuildingType } from '@shared/types/buildingSystem';

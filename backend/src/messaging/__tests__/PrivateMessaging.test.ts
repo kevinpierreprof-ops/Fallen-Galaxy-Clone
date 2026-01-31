@@ -4,6 +4,7 @@
  * Comprehensive tests for private messaging
  */
 
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { PrivateMessagingManager } from '../PrivateMessagingManager';
 import { db } from '@/database/connection';
 import { initializePrivateMessagingTables } from '@/database/models/PrivateMessageModel';
